@@ -1,2 +1,5 @@
 # DeepEAG
-DeepEAG
+DeepEAG: An edge-powered graph neural network using SMILES augmentation for cancer drug response prediction
+![image](https://github.com/zhejiangzhuque/DeepEAG/blob/main/model.jpg)
+# Requirements
+[environment prepare](http://www.cnblogs.com/sxdcgaq8080/p/7894828.html)
