@@ -14,8 +14,14 @@ Installation has been tested in a Linux/MacOS platform.
 
 ```conda activate DeepEAG```
 # Model implementation
-Step 1: Data Preparing
+Step 1: gene data Preparing
 
-Four types of raw data are required to generate genomic mutation matrix(copy number, Gene mutation, Gene methlation, Gene expression )
+Four types of raw data are required to generate genomic mutation matrix(the order is: copy number,  Gene expression, Gene methlation, Gene mutation).
 
-Data of the same class were saved as after normalization（[data/CCLE/Result_StandardScaler.csv](https://github.com/zhejiangzhuque/DeepEAG/blob/main/data/CCLE/Result_StandardScaler.csv)）
+Data of the same class were saved as after normalization（[data/CCLE/Result_StandardScaler.csv](https://github.com/zhejiangzhuque/DeepEAG/blob/main/data/CCLE/Result_StandardScaler.csv)）, Four items of data were combined into a four-element group.
+
+The Four types of raw data files can be downloaded from CCLE database.
+
+Step 2: drug data Preparing and Feature extraction
+
+
