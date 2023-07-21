@@ -40,7 +40,7 @@ smiles_feature: The resulting features are extracted directly from SMILES by Tra
 
 ```python extract_drug_features_auc.py -use_aug True -aug_num 2```
 
-```python extract_drug_features_auc.py -use_aug False -aug_num 2```
+```python extract_drug_features_auc.py -use_aug False```
 
 [-use_aug] Whether to conduct data augmentation (default: Fasle)
 
