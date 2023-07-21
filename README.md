@@ -36,9 +36,10 @@ adj_np_01: adjacent list of all atoms within a drug. It denotes the all the neig
 
 smiles_feature: The resulting features are extracted directly from SMILES by Transformer
 
-Selection of feature extraction for data enhancement or not
+### Selection of feature extraction for data enhancement or not
 
 ```python extract_drug_features_auc.py -use_aug True -aug_num 2```
+
 ```python extract_drug_features_auc.py -use_aug False -aug_num 2```
 
 [-use_aug] Whether to conduct data augmentation (default: Fasle)
