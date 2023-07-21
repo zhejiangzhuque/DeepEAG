@@ -24,4 +24,5 @@ The Four types of raw data files can be downloaded from CCLE database.
 
 Step 2: drug data Preparing and Feature extraction
 
+Each drug in our study will be represented as a graph with nodes and edges, and we collected a total of 221 drugs. Here, we use the [deepchem](https://github.com/deepchem/deepchem) library to extract node features and graphs of drugs.
 
