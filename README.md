@@ -14,7 +14,7 @@ Installation has been tested in a Linux/MacOS platform.
 
 ```conda activate DeepEAG```
 # Model implementation
-#Step 1: gene data Preparing
+## Step 1: gene data Preparing
 
 Four types of raw data are required to generate genomic mutation matrix(the order is: copy number,  Gene expression, Gene methlation, Gene mutation).
 
@@ -22,7 +22,7 @@ Data of the same class were saved as after normalization（[data/CCLE/Result_Sta
 
 The Four types of raw data files can be downloaded from CCLE database.
 
-#Step 2: drug data Preparing and Feature extraction
+## Step 2: drug data Preparing and Feature extraction
 
 Each drug in our study will be represented as a graph with nodes and edges, and we collected a total of 221 drugs. Here, we use the [deepchem](https://github.com/deepchem/deepchem) library to extract node features and graphs of drugs.
 
