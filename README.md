@@ -11,6 +11,7 @@ DeepEAG can be downloaded by
 Installation has been tested in a Linux/MacOS platform.
 # Environment
 ```conda env create -f DeepEAG.yml```
+
 ```conda activate DeepEAG```
 
 
