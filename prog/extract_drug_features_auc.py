@@ -362,73 +362,90 @@ def _drug2emb_encoder(smile):
 
     return i, np.asarray(input_mask)
 parser = argparse.ArgumentParser(description='Drug_response_pre')
-parser.add_argument('-use_aug', dest='use_aug', type=bool,default=True, help='use data aug')
-parser.add_argument('-aug_num', dest='aug_num', type=bool,default=1, help='data augtimes')
+parser.add_argument('-use_aug', dest='use_aug', type=bool,default=False, help='use data aug')
+parser.add_argument('-aug_num', dest='aug_num', type=bool,default=2, help='data augtimes')
 
 args = parser.parse_args()
 
 if __name__  == '__main__':
     count_aug=0
     drug_smiles_file = '../data/223drugs_pubchem_smiles.txt'
-    save_dir = '../data/GDSC/aug_data_1'
     pubchemid2smile = {item.split('\t')[0]: item.split('\t')[1].strip() for item in open(drug_smiles_file).readlines()}
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-    molecules = []
-    for each in tqdm(pubchemid2smile.keys()):
-        if each=="84691":
-            continue
-        smiles=(pubchemid2smile[each])
-        if args.use_aug:
-            aug_smiles = []
-            for i in range(args.aug_num):
-                aug_smiles.append(Chem.MolToSmiles(Chem.MolFromSmiles(smiles), doRandom=True))
-            aug_smiles.append(smiles)
-            # print(len(aug_smiles))
-            # print(aug_smiles)
-            for idx,smiles in enumerate(aug_smiles):
-                save_id=each
-                if idx!=len(aug_smiles)-1:
-                    save_id="k_"+str(each)+":"+str(count_aug)
-                    count_aug+=1
-                molecules.append(Chem.MolFromSmiles(smiles))
-                graph_featurizer = MolGraphConvFeaturizer(use_edges=True, use_chirality=True, use_partial_charge=True)
-                graph_mols = graph_featurizer.featurize(molecules)
-                node_features = graph_mols[0].node_features
-                edges_attr2 = graph_mols[0].edge_features
-                edges_index = graph_mols[0].edge_index
-                num_nodes = node_features.shape[0]
-                adj_np = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
-                adj_np_01 = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
-                index = 0
-                for i in range(0, len(edges_index[0])):
-                    adj_np[edges_index[0][i]][edges_index[1][i]] = edges_attr2[index]
-                    adj_np_01[edges_index[0][i]][edges_index[1][i]] = 1
-                    index += 1
-                smiles_feature = _drug2emb_encoder(smiles)
-                features_tmp=[node_features, adj_np, adj_np_01,smiles_feature]
-                molecules=[]
-                hkl.dump(features_tmp, '%s/%s.hkl' % (save_dir, save_id))
-    print("%d drug and %d Data augmentation drugs features generated" %(len(pubchemid2smile.keys()),count_aug+1))
-        # else:
-        #     molecules = []
-        #     molecules.append(Chem.MolFromSmiles(pubchemid2smile[each]))
-        #     graph_featurizer = MolGraphConvFeaturizer(use_edges=True, use_chirality=True, use_partial_charge=True)
-        #     graph_mols = graph_featurizer.featurize(molecules)
-        #
-        #     node_features = graph_mols[0].node_features
-        #     edges_attr2 = graph_mols[0].edge_features
-        #     edges_index = graph_mols[0].edge_index
-        #     num_nodes = node_features.shape[0]
-        #
-        #     adj_np = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
-        #     adj_np_01 = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
-        #     index = 0
-        #     for i in range(0, len(edges_index[0])):
-        #         adj_np[edges_index[0][i]][edges_index[1][i]] = edges_attr2[index]
-        #         adj_np_01[edges_index[0][i]][edges_index[1][i]] = 1
-        #         index += 1
-        #     # print(node_features.shape,"node")
-        #     # break
-        #     smiles_feature = _drug2emb_encoder(smiles)
-        #     hkl.dump([node_features, adj_np, adj_np_01, smiles_feature], '%s/%s.hkl' % (save_dir, each))
+    if (args.use_aug):
+        save_dir = '../data/GDSC/aug_data_'+str(args.aug_num)
+        pubchemid2smile = {item.split('\t')[0]: item.split('\t')[1].strip() for item in
+                           open(drug_smiles_file).readlines()}
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        molecules = []
+        count_drug=0
+        for each in tqdm(pubchemid2smile.keys()):
+            if each == "84691":
+                continue
+            count_drug+=1
+            smiles = (pubchemid2smile[each])
+            if args.use_aug:
+                aug_smiles = []
+                for i in range(args.aug_num):
+                    aug_smiles.append(Chem.MolToSmiles(Chem.MolFromSmiles(smiles), doRandom=True))
+                aug_smiles.append(smiles)
+                for idx, smiles in enumerate(aug_smiles):
+                    save_id = each
+                    if idx != len(aug_smiles) - 1:
+                        save_id = "k_" + str(each) + ":" + str(count_aug)
+                        count_aug += 1
+                    molecules.append(Chem.MolFromSmiles(smiles))
+                    graph_featurizer = MolGraphConvFeaturizer(use_edges=True, use_chirality=True,
+                                                              use_partial_charge=True)
+                    graph_mols = graph_featurizer.featurize(molecules)
+                    node_features = graph_mols[0].node_features
+                    edges_attr2 = graph_mols[0].edge_features
+                    edges_index = graph_mols[0].edge_index
+                    num_nodes = node_features.shape[0]
+                    adj_np = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
+                    adj_np_01 = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
+                    index = 0
+                    for i in range(0, len(edges_index[0])):
+                        adj_np[edges_index[0][i]][edges_index[1][i]] = edges_attr2[index]
+                        adj_np_01[edges_index[0][i]][edges_index[1][i]] = 1
+                        index += 1
+                    smiles_feature = _drug2emb_encoder(smiles)
+                    features_tmp = [node_features, adj_np, adj_np_01, smiles_feature]
+                    molecules = []
+                    hkl.dump(features_tmp, '%s/%s.hkl' % (save_dir, save_id))
+        print("%d drug and %d Data augmentation drugs features generated" % (count_drug, count_aug))
+    else:
+        count_drug=0
+        save_dir = '../data/GDSC/50 and 11'
+        pubchemid2smile = {item.split('\t')[0]: item.split('\t')[1].strip() for item in
+                           open(drug_smiles_file).readlines()}
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+        molecules = []
+        for each in tqdm(pubchemid2smile.keys()):
+            if each == "84691":
+                continue
+            count_drug+=1
+            smiles = (pubchemid2smile[each])
+            molecules = []
+            molecules.append(Chem.MolFromSmiles(pubchemid2smile[each]))
+            graph_featurizer = MolGraphConvFeaturizer(use_edges=True, use_chirality=True, use_partial_charge=True)
+            graph_mols = graph_featurizer.featurize(molecules)
+
+            node_features = graph_mols[0].node_features
+            edges_attr2 = graph_mols[0].edge_features
+            edges_index = graph_mols[0].edge_index
+            num_nodes = node_features.shape[0]
+
+            adj_np = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
+            adj_np_01 = np.zeros((num_nodes, num_nodes, edges_attr2.shape[1]))
+            index = 0
+            for i in range(0, len(edges_index[0])):
+                adj_np[edges_index[0][i]][edges_index[1][i]] = edges_attr2[index]
+                adj_np_01[edges_index[0][i]][edges_index[1][i]] = 1
+                index += 1
+            smiles_feature = _drug2emb_encoder(smiles)
+            hkl.dump([node_features, adj_np, adj_np_01, smiles_feature], '%s/%s.hkl' % (save_dir, each))
+        print("%d drug's features generated" % (count_drug))
+
+
