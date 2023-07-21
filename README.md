@@ -9,6 +9,8 @@ DeepEAG can be downloaded by
 ```git clone git@github.com:zhejiangzhuque/DeepEAG.git```  
 
 Installation has been tested in a Linux/MacOS platform.
-
+# Environment
+```conda env create -f DeepEAG.yml```
+```conda activate DeepEAG```
 
 
