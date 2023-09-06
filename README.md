@@ -46,6 +46,8 @@ smiles_feature: The resulting features are extracted directly from SMILES by Tra
 
 [-aug_num] The number of each SMILES recombined into new virtual SMILES (default: 2)
 
+## Step 3: Conduct training
+```python run_DeepEAG_newaug2.py```
 
 
 
